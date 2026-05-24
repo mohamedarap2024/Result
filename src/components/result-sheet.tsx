@@ -1,7 +1,6 @@
 "use client";
 
 import { forwardRef } from "react";
-import Image from "next/image";
 import { LOGO_SRC } from "@/components/brand-logo";
 import type { Student } from "@/lib/api";
 import { cn } from "@/lib/utils";
@@ -29,13 +28,12 @@ export const ResultSheet = forwardRef<HTMLDivElement, ResultSheetProps>(
         )}
       >
         <div className="border-b border-slate-200 px-4 py-5 text-center sm:px-8 sm:py-6">
-          <Image
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
             src={LOGO_SRC}
             alt={LOGO_ALT}
-            width={920}
-            height={230}
             className="mx-auto h-auto w-full max-h-28 object-contain sm:max-h-36"
-            priority
+            crossOrigin="anonymous"
           />
         </div>
 

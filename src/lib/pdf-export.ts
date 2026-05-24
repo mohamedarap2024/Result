@@ -1,7 +1,7 @@
 import html2canvas from "html2canvas";
 import { jsPDF } from "jspdf";
 
-/** Export a white result sheet to A4 PDF (multi-page if needed). */
+/** Export element to A4 PDF — reliable download with multi-page support */
 export async function exportElementToPdf(
   element: HTMLElement,
   filename: string
@@ -9,13 +9,17 @@ export async function exportElementToPdf(
   const canvas = await html2canvas(element, {
     scale: 2,
     useCORS: true,
+    allowTaint: true,
     backgroundColor: "#ffffff",
     logging: false,
-    width: element.scrollWidth,
-    height: element.scrollHeight,
+    imageTimeout: 20000,
+    scrollX: 0,
+    scrollY: 0,
+    windowWidth: element.scrollWidth,
+    windowHeight: element.scrollHeight,
   });
 
-  const imgData = canvas.toDataURL("image/png");
+  const imgData = canvas.toDataURL("image/png", 1.0);
   const pdf = new jsPDF({ orientation: "p", unit: "mm", format: "a4" });
   const pageWidth = 210;
   const pageHeight = 297;

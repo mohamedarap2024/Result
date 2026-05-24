@@ -136,6 +136,10 @@
   }
 }
 
+.home-search-hero {
+  backdrop-filter: blur(12px);
+}
+
 .logo-hero-band {
   width: 100%;
   max-width: min(100%, 56rem);

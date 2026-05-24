@@ -2,11 +2,12 @@
 
 import { useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, ArrowLeft, FileText, Sparkles } from "lucide-react";
+import { Search, ArrowLeft, FileText } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { api, Student } from "@/lib/api";
-import { BrandLogo } from "@/components/brand-logo";
+import { PortalHero } from "@/components/portal-hero";
+import { ResultCard } from "@/components/result-card";
 import { ResultSheet } from "@/components/result-sheet";
 import { useNotice } from "@/components/plain-notice";
 import { MSG, getApiMessage } from "@/lib/messages";
@@ -17,7 +18,7 @@ export default function Home() {
   const [query, setQuery] = useState("");
   const [result, setResult] = useState<Student | null>(null);
   const [loading, setLoading] = useState(false);
-  const resultRef = useRef<HTMLDivElement | null>(null);
+  const printRef = useRef<HTMLDivElement | null>(null);
 
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -38,10 +39,10 @@ export default function Home() {
   };
 
   const handleDownloadPdf = async () => {
-    if (!resultRef.current || !result) return;
+    if (!printRef.current || !result) return;
     try {
       await exportElementToPdf(
-        resultRef.current,
+        printRef.current,
         `${result.student_id}-result.pdf`
       );
       notify(MSG.save.success);
@@ -56,7 +57,7 @@ export default function Home() {
         <div className="absolute left-1/2 top-0 h-[420px] w-[420px] -translate-x-1/2 rounded-full bg-primary/10 blur-[100px]" />
       </div>
 
-      <div className="relative z-10 mx-auto w-full max-w-3xl px-4 pb-16 pt-4 text-center safe-pad-x sm:px-6 sm:pt-8">
+      <div className="relative z-10 mx-auto w-full max-w-3xl px-4 pb-16 pt-6 safe-pad-x sm:px-6 sm:pt-10">
         {!result && (
           <motion.div
             initial={{ opacity: 0, y: 12 }}
@@ -64,43 +65,31 @@ export default function Home() {
             transition={{ duration: 0.45 }}
             className="flex flex-col items-center"
           >
-            <BrandLogo variant="header" className="mb-5 px-2 sm:mb-6" />
-
-            <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-primary">
-              <Sparkles className="h-3.5 w-3.5" />
-              Official Results Portal
-            </div>
-
-            <h1 className="text-3xl font-extrabold tracking-tight sm:text-4xl md:text-5xl">
-              <span className="text-gradient">Student Result</span>{" "}
-              <span className="text-foreground">Portal</span>
-            </h1>
-
-            <p className="mx-auto mt-3 max-w-lg px-1 text-sm leading-relaxed text-muted-foreground sm:text-lg">
-              Enter your Student ID to view exam marks instantly — secure,
-              accurate, and official.
-            </p>
+            <PortalHero />
 
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1, duration: 0.4 }}
-              className="mx-auto mt-6 w-full max-w-xl sm:mt-7"
+              className="w-full max-w-xl"
             >
-              <div className="glass-panel home-search-panel rounded-2xl border border-primary/15 p-3 shadow-xl shadow-black/25 sm:p-2.5">
+              <div className="home-search-hero rounded-2xl border border-primary/20 bg-gradient-to-b from-white/[0.06] to-transparent p-4 shadow-2xl shadow-black/30 sm:p-5">
+                <p className="mb-3 text-center text-xs font-medium text-muted-foreground sm:text-sm">
+                  Search by Student ID
+                </p>
                 <form
                   onSubmit={handleSearch}
-                  className="flex flex-col gap-3 sm:flex-row sm:items-stretch sm:gap-2"
+                  className="flex flex-col gap-3 sm:flex-row sm:items-stretch"
                 >
                   <div className="relative min-w-0 flex-1">
-                    <Search className="pointer-events-none absolute left-4 top-1/2 z-10 h-5 w-5 -translate-y-1/2 text-primary/70" />
+                    <Search className="pointer-events-none absolute left-4 top-1/2 z-10 h-5 w-5 -translate-y-1/2 text-primary" />
                     <Input
                       value={query}
                       onChange={(e) => setQuery(e.target.value)}
                       placeholder="Enter your Student ID"
                       inputMode="numeric"
                       autoComplete="off"
-                      className="h-14 rounded-xl border border-white/10 bg-black/20 pl-12 pr-4 text-base shadow-inner shadow-black/20 placeholder:text-muted-foreground/80 focus-visible:border-primary/40 focus-visible:ring-2 focus-visible:ring-primary/30 sm:h-14"
+                      className="h-14 rounded-xl border border-white/15 bg-black/30 pl-12 pr-4 text-base font-medium shadow-inner placeholder:text-muted-foreground/70 focus-visible:border-primary/50 focus-visible:ring-2 focus-visible:ring-primary/25"
                       autoFocus
                     />
                   </div>
@@ -108,7 +97,7 @@ export default function Home() {
                     type="submit"
                     disabled={loading}
                     size="lg"
-                    className="h-14 w-full shrink-0 rounded-xl px-8 text-base font-semibold shadow-lg shadow-primary/30 transition-transform active:scale-[0.98] sm:h-14 sm:min-w-[9.5rem] sm:w-auto"
+                    className="h-14 w-full rounded-xl bg-primary px-8 text-base font-semibold text-primary-foreground shadow-lg shadow-primary/35 transition-transform active:scale-[0.98] sm:min-w-[10rem] sm:w-auto"
                   >
                     {loading ? "Searching…" : "Search"}
                   </Button>
@@ -125,7 +114,7 @@ export default function Home() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -12 }}
-              className="mt-4 text-left"
+              className="mt-2"
             >
               <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
                 <Button
@@ -146,7 +135,15 @@ export default function Home() {
                 </Button>
               </div>
 
-              <ResultSheet ref={resultRef} student={result} />
+              <ResultCard student={result} />
+
+              {/* Printable copy for PDF (off-screen, html2canvas) */}
+              <div
+                className="pointer-events-none fixed left-[-9999px] top-0 z-[-1] w-[800px]"
+                aria-hidden
+              >
+                <ResultSheet ref={printRef} student={result} />
+              </div>
             </motion.div>
           )}
         </AnimatePresence>
