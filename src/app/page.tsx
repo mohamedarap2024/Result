@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, ArrowLeft, FileText } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -8,10 +8,9 @@ import { Button } from "@/components/ui/button";
 import { api, Student } from "@/lib/api";
 import { PortalHero } from "@/components/portal-hero";
 import { ResultCard } from "@/components/result-card";
-import { ResultSheet } from "@/components/result-sheet";
 import { useNotice } from "@/components/plain-notice";
 import { MSG, getApiMessage } from "@/lib/messages";
-import { exportElementToPdf } from "@/lib/pdf-export";
+import { exportStudentResultPdf } from "@/lib/pdf-export";
 
 export default function Home() {
   const notify = useNotice();
@@ -19,7 +18,6 @@ export default function Home() {
   const [result, setResult] = useState<Student | null>(null);
   const [loading, setLoading] = useState(false);
   const [pdfLoading, setPdfLoading] = useState(false);
-  const printRef = useRef<HTMLDivElement | null>(null);
 
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -40,16 +38,16 @@ export default function Home() {
   };
 
   const handleDownloadPdf = async () => {
-    if (!printRef.current || !result || pdfLoading) return;
+    if (!result || pdfLoading) return;
     setPdfLoading(true);
     try {
-      await exportElementToPdf(
-        printRef.current,
+      await exportStudentResultPdf(
+        result,
         `${result.student_id}-result.pdf`
       );
-      notify(MSG.save.success);
+      notify(MSG.pdf.success);
     } catch {
-      notify(MSG.save.failure);
+      notify(MSG.pdf.failure);
     } finally {
       setPdfLoading(false);
     }
@@ -141,14 +139,6 @@ export default function Home() {
               </div>
 
               <ResultCard student={result} />
-
-              {/* Printable copy for PDF (off-screen, html2canvas) */}
-              <div
-                className="pdf-capture-host pointer-events-none fixed left-0 top-0 w-[794px] opacity-[0.01]"
-                aria-hidden
-              >
-                <ResultSheet ref={printRef} student={result} />
-              </div>
             </motion.div>
           )}
         </AnimatePresence>

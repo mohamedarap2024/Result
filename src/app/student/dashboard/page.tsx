@@ -1,23 +1,21 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { FileText, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { BrandLogo } from "@/components/brand-logo";
 import { ResultCard } from "@/components/result-card";
-import { ResultSheet } from "@/components/result-sheet";
 import type { Student } from "@/lib/api";
 import { useNotice } from "@/components/plain-notice";
 import { MSG } from "@/lib/messages";
-import { exportElementToPdf } from "@/lib/pdf-export";
+import { exportStudentResultPdf } from "@/lib/pdf-export";
 
 export default function StudentDashboardPage() {
   const router = useRouter();
   const notify = useNotice();
   const [student, setStudent] = useState<Student | null>(null);
-  const printRef = useRef<HTMLDivElement>(null);
   const [pdfLoading, setPdfLoading] = useState(false);
 
   useEffect(() => {
@@ -41,16 +39,16 @@ export default function StudentDashboardPage() {
   };
 
   const handleDownloadPdf = async () => {
-    if (!printRef.current || !student || pdfLoading) return;
+    if (!student || pdfLoading) return;
     setPdfLoading(true);
     try {
-      await exportElementToPdf(
-        printRef.current,
+      await exportStudentResultPdf(
+        student,
         `${student.student_id}-result.pdf`
       );
-      notify(MSG.save.success);
+      notify(MSG.pdf.success);
     } catch {
-      notify(MSG.save.failure);
+      notify(MSG.pdf.failure);
     } finally {
       setPdfLoading(false);
     }
@@ -70,13 +68,6 @@ export default function StudentDashboardPage() {
 
       <div className="mx-auto w-full max-w-3xl px-4 pb-16 safe-pad-x">
         <ResultCard student={student} />
-
-        <div
-          className="pdf-capture-host pointer-events-none fixed left-0 top-0 w-[794px] opacity-[0.01]"
-          aria-hidden
-        >
-          <ResultSheet ref={printRef} student={student} />
-        </div>
 
         <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-center">
           <Button

@@ -16,6 +16,10 @@ export const MSG = {
     success: "Data saved successfully",
     failure: "Unable to save data",
   },
+  pdf: {
+    success: "PDF downloaded successfully",
+    failure: "Unable to download PDF. Please try again.",
+  },
   update: {
     success: "Updated successfully",
     failure: "Update failed",
