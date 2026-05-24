@@ -260,6 +260,13 @@ body {
   }
 }
 
+/* Hidden printable layer — in viewport for html2canvas (not off-screen) */
+.pdf-capture-host {
+  z-index: -1;
+  pointer-events: none;
+  overflow: visible;
+}
+
 /* Official result sheet — PDF + screen (no overlapping columns) */
 .result-pdf-sheet {
   position: relative;

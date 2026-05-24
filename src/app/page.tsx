@@ -18,6 +18,7 @@ export default function Home() {
   const [query, setQuery] = useState("");
   const [result, setResult] = useState<Student | null>(null);
   const [loading, setLoading] = useState(false);
+  const [pdfLoading, setPdfLoading] = useState(false);
   const printRef = useRef<HTMLDivElement | null>(null);
 
   const handleSearch = async (e: React.FormEvent) => {
@@ -39,7 +40,8 @@ export default function Home() {
   };
 
   const handleDownloadPdf = async () => {
-    if (!printRef.current || !result) return;
+    if (!printRef.current || !result || pdfLoading) return;
+    setPdfLoading(true);
     try {
       await exportElementToPdf(
         printRef.current,
@@ -48,6 +50,8 @@ export default function Home() {
       notify(MSG.save.success);
     } catch {
       notify(MSG.save.failure);
+    } finally {
+      setPdfLoading(false);
     }
   };
 
@@ -128,10 +132,11 @@ export default function Home() {
                 <Button
                   variant="outline"
                   onClick={handleDownloadPdf}
+                  disabled={pdfLoading}
                   className="w-full gap-2 border-primary/25 bg-primary/10 text-primary hover:bg-primary/15 sm:w-auto"
                 >
                   <FileText className="h-4 w-4" />
-                  Download PDF
+                  {pdfLoading ? "Preparing PDF…" : "Download PDF"}
                 </Button>
               </div>
 
@@ -139,7 +144,7 @@ export default function Home() {
 
               {/* Printable copy for PDF (off-screen, html2canvas) */}
               <div
-                className="pointer-events-none fixed left-[-9999px] top-0 z-[-1] w-[800px]"
+                className="pdf-capture-host pointer-events-none fixed left-0 top-0 w-[794px] opacity-[0.01]"
                 aria-hidden
               >
                 <ResultSheet ref={printRef} student={result} />

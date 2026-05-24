@@ -28,12 +28,12 @@ export const ResultSheet = forwardRef<HTMLDivElement, ResultSheetProps>(
         )}
       >
         <div className="border-b border-slate-200 px-4 py-5 text-center sm:px-8 sm:py-6">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
+          {/* eslint-disable-next-line @next/next/no-img-element — required for html2canvas PDF */}
           <img
             src={LOGO_SRC}
             alt={LOGO_ALT}
-            className="mx-auto h-auto w-full max-h-28 object-contain sm:max-h-36"
-            crossOrigin="anonymous"
+            decoding="sync"
+            className="mx-auto block h-auto w-full max-h-28 object-contain sm:max-h-36"
           />
         </div>
 

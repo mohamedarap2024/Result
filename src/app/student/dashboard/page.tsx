@@ -18,6 +18,7 @@ export default function StudentDashboardPage() {
   const notify = useNotice();
   const [student, setStudent] = useState<Student | null>(null);
   const printRef = useRef<HTMLDivElement>(null);
+  const [pdfLoading, setPdfLoading] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem("student_token");
@@ -40,7 +41,8 @@ export default function StudentDashboardPage() {
   };
 
   const handleDownloadPdf = async () => {
-    if (!printRef.current || !student) return;
+    if (!printRef.current || !student || pdfLoading) return;
+    setPdfLoading(true);
     try {
       await exportElementToPdf(
         printRef.current,
@@ -49,6 +51,8 @@ export default function StudentDashboardPage() {
       notify(MSG.save.success);
     } catch {
       notify(MSG.save.failure);
+    } finally {
+      setPdfLoading(false);
     }
   };
 
@@ -68,16 +72,20 @@ export default function StudentDashboardPage() {
         <ResultCard student={student} />
 
         <div
-          className="pointer-events-none fixed left-[-9999px] top-0 z-[-1] w-[800px]"
+          className="pdf-capture-host pointer-events-none fixed left-0 top-0 w-[794px] opacity-[0.01]"
           aria-hidden
         >
           <ResultSheet ref={printRef} student={student} />
         </div>
 
         <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-center">
-          <Button onClick={handleDownloadPdf} className="w-full gap-2 sm:w-auto">
+          <Button
+            onClick={handleDownloadPdf}
+            disabled={pdfLoading}
+            className="w-full gap-2 sm:w-auto"
+          >
             <FileText className="h-4 w-4" />
-            Download result report
+            {pdfLoading ? "Preparing PDF…" : "Download result report"}
           </Button>
           <Link href="/" className="w-full sm:w-auto">
             <Button variant="outline" className="w-full">
