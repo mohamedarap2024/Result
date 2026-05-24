@@ -27,6 +27,8 @@ export const MSG = {
   db: {
     connectionFailed: "Database connection failed",
     unableToProcess: "Unable to process request",
+    networkBlocked:
+      "Cannot reach API — check NEXT_PUBLIC_API_URL on Vercel and CORS_ORIGIN on backend, then redeploy both",
   },
   backend: {
     operationFailed: "Operation failed. Please try again later",
@@ -46,7 +48,7 @@ export function getApiMessage(err: unknown, fallback: string): string {
     axiosErr.response?.data?.message ||
     axiosErr.response?.data?.error ||
     (axiosErr.message?.includes("Network Error")
-      ? MSG.db.connectionFailed
+      ? MSG.db.networkBlocked
       : fallback)
   );
 }
