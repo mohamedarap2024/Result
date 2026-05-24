@@ -122,6 +122,20 @@
   );
 }
 
+.home-search-panel {
+  background: linear-gradient(
+    145deg,
+    rgba(15, 22, 35, 0.95) 0%,
+    rgba(10, 16, 26, 0.9) 100%
+  );
+}
+
+@media (max-width: 639px) {
+  .home-search-panel form {
+    gap: 0.75rem;
+  }
+}
+
 .logo-hero-band {
   width: 100%;
   max-width: min(100%, 56rem);

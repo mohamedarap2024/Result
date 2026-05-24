@@ -11,8 +11,6 @@ import { api, Student } from "@/lib/api";
 import { BrandLogo } from "@/components/brand-logo";
 import { useNotice } from "@/components/plain-notice";
 import { MSG, getApiMessage } from "@/lib/messages";
-import Link from "next/link";
-
 export default function Home() {
   const notify = useNotice();
   const [query, setQuery] = useState("");
@@ -73,7 +71,7 @@ export default function Home() {
             transition={{ duration: 0.45 }}
             className="flex flex-col items-center"
           >
-            <BrandLogo variant="header" framed="hero" className="mb-5 sm:mb-6" />
+            <BrandLogo variant="header" className="mb-5 px-2 sm:mb-6" />
 
             <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-primary">
               <Sparkles className="h-3.5 w-3.5" />
@@ -96,18 +94,20 @@ export default function Home() {
               transition={{ delay: 0.1, duration: 0.4 }}
               className="mx-auto mt-6 w-full max-w-xl sm:mt-7"
             >
-              <div className="glass-panel rounded-2xl p-2 sm:p-2.5">
+              <div className="glass-panel home-search-panel rounded-2xl border border-primary/15 p-3 shadow-xl shadow-black/25 sm:p-2.5">
                 <form
                   onSubmit={handleSearch}
-                  className="flex flex-col gap-2 sm:flex-row sm:items-center"
+                  className="flex flex-col gap-3 sm:flex-row sm:items-stretch sm:gap-2"
                 >
-                  <div className="relative flex-1">
-                    <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
+                  <div className="relative min-w-0 flex-1">
+                    <Search className="pointer-events-none absolute left-4 top-1/2 z-10 h-5 w-5 -translate-y-1/2 text-primary/70" />
                     <Input
                       value={query}
                       onChange={(e) => setQuery(e.target.value)}
                       placeholder="Enter your Student ID"
-                      className="h-12 border-0 bg-transparent pl-12 text-base shadow-none focus-visible:ring-0 sm:h-14"
+                      inputMode="numeric"
+                      autoComplete="off"
+                      className="h-14 rounded-xl border border-white/10 bg-black/20 pl-12 pr-4 text-base shadow-inner shadow-black/20 placeholder:text-muted-foreground/80 focus-visible:border-primary/40 focus-visible:ring-2 focus-visible:ring-primary/30 sm:h-14"
                       autoFocus
                     />
                   </div>
@@ -115,18 +115,12 @@ export default function Home() {
                     type="submit"
                     disabled={loading}
                     size="lg"
-                    className="h-12 w-full shrink-0 rounded-xl px-8 text-base font-semibold shadow-lg shadow-primary/25 sm:h-14 sm:w-auto"
+                    className="h-14 w-full shrink-0 rounded-xl px-8 text-base font-semibold shadow-lg shadow-primary/30 transition-transform active:scale-[0.98] sm:h-14 sm:min-w-[9.5rem] sm:w-auto"
                   >
                     {loading ? "Searching…" : "Search"}
                   </Button>
                 </form>
               </div>
-              <p className="mt-3 text-xs text-muted-foreground">
-                Use the ID number provided by your school ·{" "}
-                <Link href="/student/login" className="text-primary hover:underline">
-                  Student login
-                </Link>
-              </p>
             </motion.div>
           </motion.div>
         )}
@@ -166,7 +160,7 @@ export default function Home() {
                 <div className="absolute left-0 top-0 h-1 w-full card-top-gradient" />
 
                 <div className="mb-6 border-b border-border pb-6 text-center sm:mb-8 sm:pb-8">
-                  <BrandLogo variant="header" framed className="mx-auto mb-4 max-w-xl sm:mb-6" />
+                  <BrandLogo variant="header" className="mx-auto mb-4 max-w-xl px-2 sm:mb-6" />
                   <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
                     Student Information
                   </p>

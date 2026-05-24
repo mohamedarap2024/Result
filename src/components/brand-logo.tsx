@@ -105,7 +105,7 @@ export function BrandLogo({
       width={960}
       height={240}
       className={cn(
-        "h-auto w-full max-h-24 object-contain object-center sm:max-h-40 md:max-h-44",
+          "h-auto w-full max-h-28 object-contain object-center sm:max-h-44 md:max-h-48",
         imgBlend
       )}
       priority
