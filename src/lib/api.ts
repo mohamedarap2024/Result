@@ -1,14 +1,26 @@
 import axios from "axios";
 
-const API_URL =
-  process.env.NEXT_PUBLIC_API_URL?.trim().replace(/\/$/, "") ||
-  "http://localhost:5228/api";
+/** Production: same-origin /api (Vercel rewrite → backend). Local: port 5228. */
+export function getApiBaseUrl(): string {
+  const fromEnv = process.env.NEXT_PUBLIC_API_URL?.trim().replace(/\/$/, "");
+  if (fromEnv) return fromEnv;
 
-export const api = axios.create({
-  baseURL: API_URL,
-});
+  if (typeof window !== "undefined") {
+    const host = window.location.hostname;
+    if (host === "localhost" || host === "127.0.0.1") {
+      return "http://localhost:5228/api";
+    }
+    return `${window.location.origin}/api`;
+  }
+
+  return "http://localhost:5228/api";
+}
+
+export const api = axios.create();
 
 api.interceptors.request.use((config) => {
+  config.baseURL = getApiBaseUrl();
+
   if (typeof window !== "undefined") {
     const isAdmin = config.url?.includes("/admin/");
     const token = isAdmin
