@@ -109,7 +109,7 @@ export default function AdminLogin() {
                     <input
                       value={username}
                       onChange={(e) => setUsername(e.target.value)}
-                      placeholder="e.g. Studentportal"
+                      placeholder="Enter your username"
                       required
                       className="h-11 w-full rounded-lg border border-white/10 bg-[#0a0f14] pl-10 pr-3 text-sm text-slate-100 placeholder:text-slate-600 focus:border-emerald-500/50 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
                     />

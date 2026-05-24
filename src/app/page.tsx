@@ -3,22 +3,21 @@
 import { useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, ArrowLeft, FileText, Sparkles } from "lucide-react";
-import html2canvas from "html2canvas";
-import { jsPDF } from "jspdf";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { api, Student } from "@/lib/api";
 import { BrandLogo } from "@/components/brand-logo";
+import { ResultSheet } from "@/components/result-sheet";
 import { useNotice } from "@/components/plain-notice";
 import { MSG, getApiMessage } from "@/lib/messages";
+import { exportElementToPdf } from "@/lib/pdf-export";
+
 export default function Home() {
   const notify = useNotice();
   const [query, setQuery] = useState("");
   const [result, setResult] = useState<Student | null>(null);
   const [loading, setLoading] = useState(false);
   const resultRef = useRef<HTMLDivElement | null>(null);
-
-  const subjectEntries = result ? Object.entries(result.subjects || {}) : [];
 
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -41,16 +40,10 @@ export default function Home() {
   const handleDownloadPdf = async () => {
     if (!resultRef.current || !result) return;
     try {
-      const canvas = await html2canvas(resultRef.current, {
-        scale: 2,
-        useCORS: true,
-        backgroundColor: "#ffffff",
-      });
-      const pdf = new jsPDF("p", "mm", "a4");
-      const imgWidth = 210;
-      const imgHeight = (canvas.height * imgWidth) / canvas.width;
-      pdf.addImage(canvas.toDataURL("image/png"), "PNG", 0, 0, imgWidth, imgHeight);
-      pdf.save(`${result.student_id}-result.pdf`);
+      await exportElementToPdf(
+        resultRef.current,
+        `${result.student_id}-result.pdf`
+      );
       notify(MSG.save.success);
     } catch {
       notify(MSG.save.failure);
@@ -153,62 +146,7 @@ export default function Home() {
                 </Button>
               </div>
 
-              <div
-                ref={resultRef}
-                className="glass-panel overflow-hidden rounded-2xl p-4 sm:p-6 md:p-8"
-              >
-                <div className="absolute left-0 top-0 h-1 w-full card-top-gradient" />
-
-                <div className="mb-6 border-b border-border pb-6 text-center sm:mb-8 sm:pb-8">
-                  <BrandLogo variant="header" className="mx-auto mb-4 max-w-xl px-2 sm:mb-6" />
-                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-                    Student Information
-                  </p>
-                  <h2 className="mt-2 break-words text-2xl font-bold sm:text-3xl">{result.name}</h2>
-                  <p className="mt-1 font-mono text-base text-primary sm:text-lg">
-                    {result.student_id}
-                  </p>
-                </div>
-
-                <div className="grid gap-6 md:grid-cols-2 md:gap-8">
-                  <div>
-                    <p className="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-                      Subject Marks
-                    </p>
-                    <div className="space-y-2">
-                      {subjectEntries.length > 0 ? (
-                        subjectEntries.map(([subject, score]) => (
-                          <div
-                            key={subject}
-                            className="subject-item flex items-center justify-between rounded-xl px-4 py-3"
-                          >
-                            <span className="font-medium">{subject}</span>
-                            <span className="text-xl font-bold tabular-nums">
-                              {score}
-                            </span>
-                          </div>
-                        ))
-                      ) : (
-                        <p className="text-sm text-muted-foreground">
-                          No subject data
-                        </p>
-                      )}
-                    </div>
-                  </div>
-
-                  <div className="performance-container flex flex-col items-center justify-center rounded-2xl p-6 text-center sm:p-8">
-                    <p className="text-sm text-muted-foreground">Total Score</p>
-                    <p className="mt-1 text-5xl font-black tabular-nums sm:text-6xl">
-                      {result.total}
-                    </p>
-                    <div className="my-6 h-px w-full performance-divider" />
-                    <p className="text-sm text-muted-foreground">Final Grade</p>
-                    <div className="grade-badge mt-3 flex h-16 w-16 items-center justify-center rounded-full bg-primary text-2xl font-bold text-primary-foreground">
-                      {result.grade}
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <ResultSheet ref={resultRef} student={result} />
             </motion.div>
           )}
         </AnimatePresence>

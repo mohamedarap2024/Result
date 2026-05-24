@@ -255,3 +255,21 @@ body {
     padding-right: max(1rem, env(safe-area-inset-right));
   }
 }
+
+/* Official result sheet — PDF + screen (no overlapping columns) */
+.result-pdf-sheet {
+  position: relative;
+  overflow: visible;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.result-subject-row {
+  page-break-inside: avoid;
+}
+
+@media print {
+  .result-pdf-sheet {
+    box-shadow: none;
+    max-width: 100%;
+  }
+}
