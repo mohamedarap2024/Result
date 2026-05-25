@@ -25,8 +25,14 @@ export const ResultSheet = forwardRef<HTMLDivElement, ResultSheetProps>(
           className
         )}
       >
-        <div className="result-sheet-logo-bar border-b border-slate-800 px-3 py-3 sm:px-6 sm:py-4">
-          <BrandLogo variant="result" className="mx-auto max-w-3xl" />
+        <div className="result-sheet-logo-bar border-b border-slate-200 px-4 py-5 text-center sm:px-8 sm:py-6">
+          <BrandLogo variant="result" className="mx-auto" />
+          <p className="mt-3 text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500 sm:text-[11px]">
+            Schools Joint Exam Center — Mogadishu
+          </p>
+          <p className="mt-1 text-[10px] text-slate-400" dir="rtl">
+            امتحان مشترك لمدارس مقديشو
+          </p>
         </div>
 
         <div className="border-b border-slate-200 px-4 py-5 text-center sm:px-8">

@@ -1,9 +1,12 @@
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 
-/** Official SJEC banner — update file + bump LOGO_VERSION after logo change */
-export const LOGO_VERSION = "20260524";
+/** Bump LOGO_VERSION after replacing logo files in /public */
+export const LOGO_VERSION = "20260525";
+/** Horizontal banner — search portal */
 export const LOGO_SRC = "/logo-sjec-banner.png";
+/** Shield emblem — result sheet + PDF (no background) */
+export const LOGO_SRC_SHIELD = "/logo-sjec-shield.png";
 const ALT =
   "Schools Joint Exam Center Mogadishu — امتحان مشترك لمدارس مقديشو";
 
@@ -61,17 +64,17 @@ export function BrandLogo({
     );
   }
 
-  /** Official result paper — black banner logo on white sheet */
+  /** Official result paper — shield logo, transparent, centered on white */
   if (variant === "result") {
     return (
       <div className={cn("result-logo-wrap w-full", className)}>
         <Image
-          src={LOGO_SRC}
+          src={LOGO_SRC_SHIELD}
           alt={ALT}
-          width={1200}
-          height={300}
+          width={480}
+          height={520}
           className={cn(
-            "logo-img mx-auto h-auto w-full max-h-[4.5rem] object-contain object-center sm:max-h-[6rem] md:max-h-[7rem]",
+            "logo-img mx-auto h-auto w-auto max-w-[min(100%,220px)] max-h-[5.5rem] object-contain object-center sm:max-h-[7rem] sm:max-w-[260px] md:max-h-[8rem]",
             imgBlend
           )}
           priority
