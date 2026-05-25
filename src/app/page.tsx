@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { api, Student } from "@/lib/api";
 import { PortalHero } from "@/components/portal-hero";
-import { ResultCard } from "@/components/result-card";
+import { ResultSheet } from "@/components/result-sheet";
 import { useNotice } from "@/components/plain-notice";
 import { MSG, getApiMessage } from "@/lib/messages";
 import { exportStudentResultPdf } from "@/lib/pdf-export";
@@ -138,7 +138,9 @@ export default function Home() {
                 </Button>
               </div>
 
-              <ResultCard student={result} />
+              <div className="result-sheet-screen overflow-hidden rounded-2xl border border-white/10 shadow-2xl shadow-black/50">
+                <ResultSheet student={result} />
+              </div>
             </motion.div>
           )}
         </AnimatePresence>

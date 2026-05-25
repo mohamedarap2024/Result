@@ -11,7 +11,10 @@ type ResultStudent = Pick<
   "student_id" | "name" | "subjects" | "total" | "grade"
 >;
 
-async function loadLogoDataUrl(): Promise<string | null> {
+async function loadLogoForPdf(): Promise<{
+  dataUrl: string;
+  aspect: number;
+} | null> {
   try {
     const url =
       typeof window !== "undefined"
@@ -20,12 +23,24 @@ async function loadLogoDataUrl(): Promise<string | null> {
     const res = await fetch(url, { cache: "force-cache" });
     if (!res.ok) return null;
     const blob = await res.blob();
-    return await new Promise((resolve, reject) => {
+    const dataUrl = await new Promise<string>((resolve, reject) => {
       const reader = new FileReader();
       reader.onload = () => resolve(reader.result as string);
       reader.onerror = () => reject(reader.error);
       reader.readAsDataURL(blob);
     });
+
+    const aspect = await new Promise<number>((resolve) => {
+      const img = new Image();
+      img.onload = () =>
+        resolve(
+          img.naturalWidth > 0 ? img.naturalHeight / img.naturalWidth : 0.25
+        );
+      img.onerror = () => resolve(0.25);
+      img.src = dataUrl;
+    });
+
+    return { dataUrl, aspect };
   } catch {
     return null;
   }
@@ -61,10 +76,20 @@ export async function exportStudentResultPdf(
   const doc = new jsPDF({ orientation: "p", unit: "mm", format: "a4" });
   let y = MARGIN;
 
-  const logo = await loadLogoDataUrl();
+  const logo = await loadLogoForPdf();
   if (logo) {
-    const logoH = 30;
-    doc.addImage(logo, "PNG", MARGIN, y, CONTENT_W, logoH, undefined, "FAST");
+    const logoW = CONTENT_W;
+    const logoH = Math.min(38, Math.max(22, logoW * logo.aspect));
+    doc.addImage(
+      logo.dataUrl,
+      "PNG",
+      MARGIN,
+      y,
+      logoW,
+      logoH,
+      undefined,
+      "FAST"
+    );
     y += logoH + 8;
   } else {
     doc.setFont("helvetica", "bold");

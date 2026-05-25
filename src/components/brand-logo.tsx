@@ -33,7 +33,7 @@ export function BrandLogo({
   blend = false,
   framed = false,
 }: {
-  variant?: "sidebar" | "hero" | "portal" | "header" | "compact";
+  variant?: "sidebar" | "hero" | "portal" | "result" | "header" | "compact";
   className?: string;
   blend?: boolean;
   /** @deprecated Use transparent wrap; solid black plate only if solid=true via framed on sidebar */
@@ -51,6 +51,25 @@ export function BrandLogo({
           height={300}
           className={cn(
             "logo-img mx-auto h-auto w-full max-h-[7.5rem] object-contain object-center sm:max-h-[9.5rem] md:max-h-[11rem]",
+            imgBlend
+          )}
+          priority
+        />
+      </LogoPlate>
+    );
+  }
+
+  /** Official result paper — white background, transparent logo */
+  if (variant === "result") {
+    return (
+      <LogoPlate className={cn("result-logo-wrap w-full", className)}>
+        <Image
+          src={LOGO_SRC}
+          alt={ALT}
+          width={1200}
+          height={300}
+          className={cn(
+            "logo-img mx-auto h-auto w-full max-h-[5.5rem] object-contain object-center sm:max-h-[7rem] md:max-h-[8rem]",
             imgBlend
           )}
           priority

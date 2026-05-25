@@ -1,18 +1,16 @@
 "use client";
 
 import { forwardRef } from "react";
-import { LOGO_SRC } from "@/components/brand-logo";
+import { BrandLogo } from "@/components/brand-logo";
 import type { Student } from "@/lib/api";
 import { cn } from "@/lib/utils";
-
-const LOGO_ALT =
-  "Schools Joint Exam Center Mogadishu — امتحان مشترك لمدارس مقديشو";
 
 type ResultSheetProps = {
   student: Pick<Student, "student_id" | "name" | "subjects" | "total" | "grade">;
   className?: string;
 };
 
+/** Official white result document — screen + print */
 export const ResultSheet = forwardRef<HTMLDivElement, ResultSheetProps>(
   function ResultSheet({ student, className }, ref) {
     const subjects = Object.entries(student.subjects || {}).filter(
@@ -27,14 +25,8 @@ export const ResultSheet = forwardRef<HTMLDivElement, ResultSheetProps>(
           className
         )}
       >
-        <div className="border-b border-slate-200 px-4 py-5 text-center sm:px-8 sm:py-6">
-          {/* eslint-disable-next-line @next/next/no-img-element — required for html2canvas PDF */}
-          <img
-            src={LOGO_SRC}
-            alt={LOGO_ALT}
-            decoding="sync"
-            className="mx-auto block h-auto w-full max-h-28 object-contain sm:max-h-36"
-          />
+        <div className="result-sheet-logo-bar border-b border-slate-200 bg-white px-4 py-4 sm:px-8 sm:py-5">
+          <BrandLogo variant="result" className="mx-auto max-w-3xl" />
         </div>
 
         <div className="border-b border-slate-200 px-4 py-5 text-center sm:px-8">

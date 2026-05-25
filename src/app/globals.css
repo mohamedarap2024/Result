@@ -306,11 +306,33 @@ body {
   overflow: visible;
 }
 
+/* Result paper on dark portal — white card, transparent logo header */
+.result-sheet-screen {
+  background: #ffffff;
+}
+
+.result-sheet-logo-bar {
+  background: #ffffff;
+}
+
+.result-logo-wrap {
+  background: transparent;
+}
+
+.result-logo-wrap .logo-img {
+  filter: none;
+}
+
+@media (max-width: 639px) {
+  .result-logo-wrap .logo-img {
+    max-height: 5rem !important;
+  }
+}
+
 /* Official result sheet — PDF + screen (no overlapping columns) */
 .result-pdf-sheet {
   position: relative;
   overflow: visible;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
 }
 
 .result-subject-row {

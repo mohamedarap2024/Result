@@ -6,7 +6,7 @@ import Link from "next/link";
 import { FileText, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { BrandLogo } from "@/components/brand-logo";
-import { ResultCard } from "@/components/result-card";
+import { ResultSheet } from "@/components/result-sheet";
 import type { Student } from "@/lib/api";
 import { useNotice } from "@/components/plain-notice";
 import { MSG } from "@/lib/messages";
@@ -67,7 +67,9 @@ export default function StudentDashboardPage() {
       </header>
 
       <div className="mx-auto w-full max-w-3xl px-4 pb-16 safe-pad-x">
-        <ResultCard student={student} />
+        <div className="result-sheet-screen overflow-hidden rounded-2xl border border-white/10 shadow-2xl shadow-black/50">
+          <ResultSheet student={student} />
+        </div>
 
         <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-center">
           <Button
