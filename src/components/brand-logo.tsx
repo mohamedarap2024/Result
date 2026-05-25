@@ -2,8 +2,10 @@ import Image from "next/image";
 import { cn } from "@/lib/utils";
 
 /** Bump LOGO_VERSION after replacing logo files in /public */
-export const LOGO_VERSION = "20260527";
-/** Horizontal banner — search portal */
+export const LOGO_VERSION = "20260528";
+/** Search portal home only — high-quality black banner */
+export const LOGO_SRC_PORTAL = "/logo-sjec-portal.png";
+/** Admin sidebar / legacy */
 export const LOGO_SRC = "/logo-sjec-banner.png";
 /** Official banner — result sheet + PDF (black border frame) */
 export const LOGO_SRC_RESULT = "/logo-sjec-result.png";
@@ -50,19 +52,21 @@ export function BrandLogo({
 
   if (variant === "portal") {
     return (
-      <LogoPlate className={cn("portal-logo-wrap w-full", className)}>
+      <div className={cn("portal-logo-frame w-full", className)}>
         <Image
-          src={LOGO_SRC}
+          src={LOGO_SRC_PORTAL}
           alt={ALT}
-          width={1200}
-          height={300}
+          width={1400}
+          height={320}
+          quality={95}
+          sizes="(max-width: 639px) 100vw, (max-width: 1024px) 90vw, 42rem"
           className={cn(
-            "logo-img mx-auto h-auto w-full max-h-[7.5rem] object-contain object-center sm:max-h-[9.5rem] md:max-h-[11rem]",
+            "portal-logo-img mx-auto block h-auto w-full object-contain object-center",
             imgBlend
           )}
           priority
         />
-      </LogoPlate>
+      </div>
     );
   }
 
