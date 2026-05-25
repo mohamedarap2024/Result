@@ -59,7 +59,7 @@ export default function StudentDashboardPage() {
   return (
     <main className="page-mesh min-h-screen">
       <header className="mx-auto flex max-w-4xl flex-col items-stretch gap-3 px-4 py-4 safe-pad-x sm:flex-row sm:items-center sm:justify-between">
-        <BrandLogo variant="header" framed className="max-w-[min(100%,380px)] self-center sm:self-auto" />
+        <BrandLogo variant="compact" className="self-center sm:self-auto" />
         <Button variant="ghost" onClick={handleLogout} className="w-full shrink-0 gap-2 sm:w-auto">
           <LogOut className="h-4 w-4" />
           Logout

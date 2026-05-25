@@ -25,7 +25,7 @@ export function ResultCard({ student, className }: ResultCardProps) {
       <div className="absolute left-0 top-0 h-1 w-full bg-gradient-to-r from-emerald-600 via-emerald-400 to-transparent" />
 
       <div className="border-b border-white/10 px-4 py-5 text-center sm:px-8 sm:py-6">
-        <BrandLogo variant="header" framed className="mx-auto max-w-lg" />
+        <BrandLogo variant="portal" className="mx-auto max-w-2xl" />
         <p className="mt-5 text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-500">
           Student Information
         </p>

@@ -59,7 +59,7 @@ export default function Home() {
         <div className="absolute left-1/2 top-0 h-[420px] w-[420px] -translate-x-1/2 rounded-full bg-primary/10 blur-[100px]" />
       </div>
 
-      <div className="relative z-10 mx-auto w-full max-w-3xl px-4 pb-16 pt-6 safe-pad-x sm:px-6 sm:pt-10">
+      <div className="relative z-10 mx-auto w-full max-w-4xl px-4 pb-16 pt-5 safe-pad-x sm:px-6 sm:pt-8 md:pt-10">
         {!result && (
           <motion.div
             initial={{ opacity: 0, y: 12 }}
@@ -73,10 +73,10 @@ export default function Home() {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1, duration: 0.4 }}
-              className="w-full max-w-xl"
+              className="w-full max-w-2xl"
             >
-              <div className="home-search-hero rounded-2xl border border-primary/20 bg-gradient-to-b from-white/[0.06] to-transparent p-4 shadow-2xl shadow-black/30 sm:p-5">
-                <p className="mb-3 text-center text-xs font-medium text-muted-foreground sm:text-sm">
+              <div className="home-search-hero rounded-2xl border border-primary/25 bg-gradient-to-b from-white/[0.07] via-white/[0.02] to-transparent p-4 shadow-2xl shadow-black/40 sm:rounded-3xl sm:p-6">
+                <p className="mb-3 text-center text-xs font-semibold uppercase tracking-wider text-primary/80 sm:text-sm">
                   Search by Student ID
                 </p>
                 <form

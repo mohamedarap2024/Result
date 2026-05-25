@@ -93,7 +93,7 @@ export function AdminShell({
         >
           {!collapsed && (
             <div className="min-w-0 flex-1">
-              <BrandLogo variant="sidebar" framed />
+              <BrandLogo variant="sidebar" />
             </div>
           )}
           <Button

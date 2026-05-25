@@ -5,14 +5,26 @@ export const LOGO_SRC = "/logo-sjec.png";
 const ALT =
   "Schools Joint Exam Center Mogadishu — امتحان مشترك لمدارس مقديشو";
 
-function LogoFrame({
+function LogoPlate({
   children,
   className,
+  solid = false,
 }: {
   children: React.ReactNode;
   className?: string;
+  /** Rare: black plate only when explicitly needed */
+  solid?: boolean;
 }) {
-  return <div className={cn("logo-brand-frame", className)}>{children}</div>;
+  return (
+    <div
+      className={cn(
+        solid ? "logo-brand-frame" : "logo-transparent-wrap",
+        className
+      )}
+    >
+      {children}
+    </div>
+  );
 }
 
 export function BrandLogo({
@@ -21,14 +33,31 @@ export function BrandLogo({
   blend = false,
   framed = false,
 }: {
-  variant?: "sidebar" | "hero" | "header" | "compact";
+  variant?: "sidebar" | "hero" | "portal" | "header" | "compact";
   className?: string;
-  /** Screen blend — use on very dark UIs only */
   blend?: boolean;
-  /** Black plate behind logo; "hero" adds soft black fade on landing */
-  framed?: boolean | "hero";
+  /** @deprecated Use transparent wrap; solid black plate only if solid=true via framed on sidebar */
+  framed?: boolean;
 }) {
   const imgBlend = blend && !framed ? "mix-blend-screen" : "";
+
+  if (variant === "portal") {
+    return (
+      <LogoPlate className={cn("portal-logo-wrap w-full", className)}>
+        <Image
+          src={LOGO_SRC}
+          alt={ALT}
+          width={1200}
+          height={300}
+          className={cn(
+            "logo-img mx-auto h-auto w-full max-h-[7.5rem] object-contain object-center sm:max-h-[9.5rem] md:max-h-[11rem]",
+            imgBlend
+          )}
+          priority
+        />
+      </LogoPlate>
+    );
+  }
 
   if (variant === "sidebar") {
     const img = (
@@ -38,16 +67,24 @@ export function BrandLogo({
         width={760}
         height={190}
         className={cn(
-          "h-auto w-full max-h-[120px] object-contain object-center",
+          "logo-img h-auto w-full max-h-[100px] object-contain object-center sm:max-h-[120px]",
           imgBlend
         )}
         priority
       />
     );
     if (framed) {
-      return <LogoFrame className={cn("w-full", className)}>{img}</LogoFrame>;
+      return (
+        <LogoPlate solid className={cn("w-full", className)}>
+          {img}
+        </LogoPlate>
+      );
     }
-    return <div className={cn("px-2 py-2", className)}>{img}</div>;
+    return (
+      <LogoPlate className={cn("w-full", className)}>
+        {img}
+      </LogoPlate>
+    );
   }
 
   if (variant === "hero") {
@@ -58,23 +95,16 @@ export function BrandLogo({
         width={900}
         height={225}
         className={cn(
-          "h-auto w-full max-h-44 object-contain object-center sm:max-h-52",
+          "logo-img h-auto w-full max-h-40 object-contain object-center sm:max-h-48",
           imgBlend
         )}
         priority
       />
     );
-    if (framed) {
-      return (
-        <LogoFrame className={cn("mx-auto w-full max-w-[min(100%,860px)]", className)}>
-          {img}
-        </LogoFrame>
-      );
-    }
     return (
-      <div className={cn("mx-auto w-full max-w-[min(100%,860px)] px-2 py-2", className)}>
+      <LogoPlate className={cn("mx-auto w-full max-w-[min(100%,860px)]", className)}>
         {img}
-      </div>
+      </LogoPlate>
     );
   }
 
@@ -86,16 +116,17 @@ export function BrandLogo({
         width={500}
         height={125}
         className={cn(
-          "h-14 w-auto max-w-[min(100%,360px)] object-contain object-left sm:h-16",
+          "logo-img h-12 w-auto max-w-[min(100%,320px)] object-contain object-left sm:h-14",
           imgBlend
         )}
         priority
       />
     );
-    if (framed) {
-      return <LogoFrame className={className}>{img}</LogoFrame>;
-    }
-    return <div className={cn("inline-flex px-1 py-1", className)}>{img}</div>;
+    return (
+      <LogoPlate className={className}>
+        {img}
+      </LogoPlate>
+    );
   }
 
   const image = (
@@ -105,30 +136,16 @@ export function BrandLogo({
       width={960}
       height={240}
       className={cn(
-          "h-auto w-full max-h-28 object-contain object-center sm:max-h-44 md:max-h-48",
+        "logo-img h-auto w-full max-h-24 object-contain object-center sm:max-h-36 md:max-h-40",
         imgBlend
       )}
       priority
     />
   );
 
-  if (framed) {
-    const plate = (
-      <LogoFrame className="mx-auto w-full max-w-[min(100%,920px)]">
-        {image}
-      </LogoFrame>
-    );
-    if (framed === "hero") {
-      return (
-        <div className={cn("logo-hero-band w-full", className)}>{plate}</div>
-      );
-    }
-    return <div className={cn("w-full", className)}>{plate}</div>;
-  }
-
   return (
-    <div className={cn("mx-auto w-full max-w-[min(100%,920px)]", className)}>
+    <LogoPlate className={cn("mx-auto w-full max-w-[min(100%,920px)]", className)}>
       {image}
-    </div>
+    </LogoPlate>
   );
 }
