@@ -2,7 +2,7 @@ import Image from "next/image";
 import { cn } from "@/lib/utils";
 
 /** Bump LOGO_VERSION after replacing logo files in /public */
-export const LOGO_VERSION = "20260525";
+export const LOGO_VERSION = "20260526b";
 /** Horizontal banner — search portal */
 export const LOGO_SRC = "/logo-sjec-banner.png";
 /** Shield emblem — result sheet + PDF (no background) */
