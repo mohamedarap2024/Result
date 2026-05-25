@@ -1,5 +1,5 @@
 import { jsPDF } from "jspdf";
-import { LOGO_SRC } from "@/components/brand-logo";
+import { LOGO_SRC, LOGO_VERSION } from "@/components/brand-logo";
 import type { Student } from "@/lib/api";
 
 const MARGIN = 14;
@@ -16,11 +16,12 @@ async function loadLogoForPdf(): Promise<{
   aspect: number;
 } | null> {
   try {
-    const url =
+    const base =
       typeof window !== "undefined"
         ? new URL(LOGO_SRC, window.location.origin).href
         : LOGO_SRC;
-    const res = await fetch(url, { cache: "force-cache" });
+    const url = `${base}?v=${LOGO_VERSION}`;
+    const res = await fetch(url, { cache: "no-store" });
     if (!res.ok) return null;
     const blob = await res.blob();
     const dataUrl = await new Promise<string>((resolve, reject) => {
@@ -79,7 +80,9 @@ export async function exportStudentResultPdf(
   const logo = await loadLogoForPdf();
   if (logo) {
     const logoW = CONTENT_W;
-    const logoH = Math.min(38, Math.max(22, logoW * logo.aspect));
+    const logoH = Math.min(42, Math.max(24, logoW * logo.aspect));
+    doc.setFillColor(0, 0, 0);
+    doc.rect(MARGIN, y, logoW, logoH, "F");
     doc.addImage(
       logo.dataUrl,
       "PNG",
@@ -90,7 +93,7 @@ export async function exportStudentResultPdf(
       undefined,
       "FAST"
     );
-    y += logoH + 8;
+    y += logoH + 10;
   } else {
     doc.setFont("helvetica", "bold");
     doc.setFontSize(13);

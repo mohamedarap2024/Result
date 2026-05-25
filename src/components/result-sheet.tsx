@@ -25,7 +25,7 @@ export const ResultSheet = forwardRef<HTMLDivElement, ResultSheetProps>(
           className
         )}
       >
-        <div className="result-sheet-logo-bar border-b border-slate-200 bg-white px-4 py-4 sm:px-8 sm:py-5">
+        <div className="result-sheet-logo-bar border-b border-slate-800 px-3 py-3 sm:px-6 sm:py-4">
           <BrandLogo variant="result" className="mx-auto max-w-3xl" />
         </div>
 
