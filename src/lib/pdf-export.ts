@@ -1,5 +1,5 @@
 import { jsPDF } from "jspdf";
-import { LOGO_SRC_SHIELD, LOGO_VERSION } from "@/components/brand-logo";
+import { LOGO_SRC_RESULT, LOGO_VERSION } from "@/components/brand-logo";
 import type { Student } from "@/lib/api";
 
 const MARGIN = 14;
@@ -18,8 +18,8 @@ async function loadLogoForPdf(): Promise<{
   try {
     const base =
       typeof window !== "undefined"
-        ? new URL(LOGO_SRC_SHIELD, window.location.origin).href
-        : LOGO_SRC_SHIELD;
+        ? new URL(LOGO_SRC_RESULT, window.location.origin).href
+        : LOGO_SRC_RESULT;
     const url = `${base}?v=${LOGO_VERSION}`;
     const res = await fetch(url, { cache: "no-store" });
     if (!res.ok) return null;
@@ -79,37 +79,34 @@ export async function exportStudentResultPdf(
 
   const logo = await loadLogoForPdf();
   if (logo) {
-    const maxLogoH = 48;
-    const maxLogoW = 70;
-    let logoH = maxLogoH;
-    let logoW = logoH / logo.aspect;
-    if (logoW > maxLogoW) {
-      logoW = maxLogoW;
-      logoH = logoW * logo.aspect;
+    const framePad = 2.5;
+    const frameW = CONTENT_W;
+    let logoW = frameW - framePad * 2;
+    let logoH = logoW * logo.aspect;
+    const maxLogoH = 32;
+    if (logoH > maxLogoH) {
+      logoH = maxLogoH;
+      logoW = logoH / logo.aspect;
     }
-    const logoX = MARGIN + (CONTENT_W - logoW) / 2;
+    const frameH = logoH + framePad * 2;
+    const frameX = MARGIN;
+    const imgX = frameX + framePad + (frameW - framePad * 2 - logoW) / 2;
+
+    doc.setDrawColor(15, 23, 42);
+    doc.setLineWidth(0.55);
+    doc.roundedRect(frameX, y, frameW, frameH, 1.5, 1.5, "S");
+
     doc.addImage(
       logo.dataUrl,
       "PNG",
-      logoX,
-      y,
+      imgX,
+      y + framePad,
       logoW,
       logoH,
       undefined,
       "FAST"
     );
-    y += logoH + 6;
-
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(8);
-    doc.setTextColor(100, 116, 139);
-    doc.text(
-      "SCHOOLS JOINT EXAM CENTER — MOGADISHU",
-      PAGE_W / 2,
-      y + 4,
-      { align: "center" }
-    );
-    y += 10;
+    y += frameH + 10;
   } else {
     doc.setFont("helvetica", "bold");
     doc.setFontSize(13);

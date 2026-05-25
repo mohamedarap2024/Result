@@ -2,10 +2,12 @@ import Image from "next/image";
 import { cn } from "@/lib/utils";
 
 /** Bump LOGO_VERSION after replacing logo files in /public */
-export const LOGO_VERSION = "20260526b";
+export const LOGO_VERSION = "20260527";
 /** Horizontal banner — search portal */
 export const LOGO_SRC = "/logo-sjec-banner.png";
-/** Shield emblem — result sheet + PDF (no background) */
+/** Official banner — result sheet + PDF (black border frame) */
+export const LOGO_SRC_RESULT = "/logo-sjec-result.png";
+/** @deprecated shield — use LOGO_SRC_RESULT */
 export const LOGO_SRC_SHIELD = "/logo-sjec-shield.png";
 const ALT =
   "Schools Joint Exam Center Mogadishu — امتحان مشترك لمدارس مقديشو";
@@ -64,17 +66,17 @@ export function BrandLogo({
     );
   }
 
-  /** Official result paper — shield logo, transparent, centered on white */
+  /** Official result paper — full banner with black border */
   if (variant === "result") {
     return (
-      <div className={cn("result-logo-wrap w-full", className)}>
+      <div className={cn("result-logo-frame mx-auto w-full max-w-2xl", className)}>
         <Image
-          src={LOGO_SRC_SHIELD}
+          src={LOGO_SRC_RESULT}
           alt={ALT}
-          width={480}
-          height={520}
+          width={1200}
+          height={280}
           className={cn(
-            "logo-img mx-auto h-auto w-auto max-w-[min(100%,220px)] max-h-[5.5rem] object-contain object-center sm:max-h-[7rem] sm:max-w-[260px] md:max-h-[8rem]",
+            "logo-img mx-auto block h-auto w-full max-h-[3.75rem] object-contain object-center sm:max-h-[4.75rem] md:max-h-[5.25rem]",
             imgBlend
           )}
           priority

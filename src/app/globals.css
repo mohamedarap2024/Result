@@ -323,9 +323,31 @@ body {
   filter: none;
 }
 
+/* Result paper — banner logo with black border */
+.result-logo-frame {
+  display: block;
+  margin-inline: auto;
+  padding: 0.5rem 0.65rem;
+  border: 2px solid #0f172a;
+  border-radius: 0.5rem;
+  background: #ffffff;
+  box-shadow:
+    0 1px 0 rgba(15, 23, 42, 0.06),
+    0 8px 24px -8px rgba(15, 23, 42, 0.12);
+}
+
+.result-logo-frame .logo-img {
+  filter: none;
+}
+
 @media (max-width: 639px) {
-  .result-logo-wrap .logo-img {
-    max-height: 5rem !important;
+  .result-logo-frame {
+    padding: 0.4rem 0.5rem;
+    border-width: 1.5px;
+  }
+
+  .result-logo-frame .logo-img {
+    max-height: 3.25rem !important;
   }
 }
 
