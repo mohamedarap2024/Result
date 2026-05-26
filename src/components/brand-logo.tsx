@@ -2,10 +2,10 @@ import Image from "next/image";
 import { cn } from "@/lib/utils";
 
 /** Bump LOGO_VERSION after replacing logo files in /public */
-export const LOGO_VERSION = "20260528";
-/** Search portal home only — high-quality black banner */
+export const LOGO_VERSION = "20260529";
+/** Portal + admin sidebar — black banner (white text) */
 export const LOGO_SRC_PORTAL = "/logo-sjec-portal.png";
-/** Admin sidebar / legacy */
+/** @deprecated use LOGO_SRC_PORTAL for UI chrome */
 export const LOGO_SRC = "/logo-sjec-banner.png";
 /** Official banner — result sheet + PDF (black border frame) */
 export const LOGO_SRC_RESULT = "/logo-sjec-result.png";
@@ -70,10 +70,10 @@ export function BrandLogo({
     );
   }
 
-  /** Official result paper — full banner with black border */
+  /** Official result paper — logo only, no border */
   if (variant === "result") {
     return (
-      <div className={cn("result-logo-frame mx-auto w-full max-w-2xl", className)}>
+      <div className={cn("result-logo-plain mx-auto w-full max-w-2xl", className)}>
         <Image
           src={LOGO_SRC_RESULT}
           alt={ALT}
@@ -90,30 +90,22 @@ export function BrandLogo({
   }
 
   if (variant === "sidebar") {
-    const img = (
-      <Image
-        src={LOGO_SRC}
-        alt={ALT}
-        width={760}
-        height={190}
-        className={cn(
-          "logo-img h-auto w-full max-h-[100px] object-contain object-center sm:max-h-[120px]",
-          imgBlend
-        )}
-        priority
-      />
-    );
-    if (framed) {
-      return (
-        <LogoPlate solid className={cn("w-full", className)}>
-          {img}
-        </LogoPlate>
-      );
-    }
     return (
-      <LogoPlate className={cn("w-full", className)}>
-        {img}
-      </LogoPlate>
+      <div className={cn("sidebar-logo-frame w-full", className)}>
+        <Image
+          src={LOGO_SRC_PORTAL}
+          alt={ALT}
+          width={1200}
+          height={280}
+          quality={95}
+          sizes="260px"
+          className={cn(
+            "sidebar-logo-img mx-auto block h-auto w-full object-contain object-center",
+            imgBlend
+          )}
+          priority
+        />
+      </div>
     );
   }
 

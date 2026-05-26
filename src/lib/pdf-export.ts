@@ -79,34 +79,26 @@ export async function exportStudentResultPdf(
 
   const logo = await loadLogoForPdf();
   if (logo) {
-    const framePad = 2.5;
-    const frameW = CONTENT_W;
-    let logoW = frameW - framePad * 2;
+    let logoW = CONTENT_W;
     let logoH = logoW * logo.aspect;
     const maxLogoH = 32;
     if (logoH > maxLogoH) {
       logoH = maxLogoH;
       logoW = logoH / logo.aspect;
     }
-    const frameH = logoH + framePad * 2;
-    const frameX = MARGIN;
-    const imgX = frameX + framePad + (frameW - framePad * 2 - logoW) / 2;
-
-    doc.setDrawColor(15, 23, 42);
-    doc.setLineWidth(0.55);
-    doc.roundedRect(frameX, y, frameW, frameH, 1.5, 1.5, "S");
+    const logoX = MARGIN + (CONTENT_W - logoW) / 2;
 
     doc.addImage(
       logo.dataUrl,
       "PNG",
-      imgX,
-      y + framePad,
+      logoX,
+      y,
       logoW,
       logoH,
       undefined,
       "FAST"
     );
-    y += frameH + 10;
+    y += logoH + 10;
   } else {
     doc.setFont("helvetica", "bold");
     doc.setFontSize(13);
