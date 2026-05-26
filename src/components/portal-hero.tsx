@@ -10,7 +10,7 @@ export function PortalHero() {
         Official Results Portal
       </div>
 
-      <BrandLogo variant="portal" className="portal-hero-logo mx-auto" />
+      <BrandLogo variant="portal" className="mx-auto" />
 
       <div className="mx-auto mt-5 h-px w-20 bg-gradient-to-r from-transparent via-primary/40 to-transparent sm:mt-6 sm:w-32" />
 

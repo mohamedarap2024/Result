@@ -2,7 +2,7 @@ import Image from "next/image";
 import { cn } from "@/lib/utils";
 
 /** Bump LOGO_VERSION after replacing logo files in /public */
-export const LOGO_VERSION = "20260530";
+export const LOGO_VERSION = "20260531";
 /** Portal + admin sidebar — black banner (white text) */
 export const LOGO_SRC_PORTAL = "/logo-sjec-portal.png";
 /** @deprecated use LOGO_SRC_PORTAL for UI chrome */
@@ -52,21 +52,20 @@ export function BrandLogo({
 
   if (variant === "portal") {
     return (
-      <div className={cn("portal-logo-wrap w-full", className)}>
-        <Image
-          src={LOGO_SRC_PORTAL}
-          alt={ALT}
-          width={1920}
-          height={440}
-          quality={100}
-          sizes="(max-width: 639px) 100vw, (max-width: 1024px) 52rem, 56rem"
-          className={cn(
-            "portal-logo-img mx-auto block h-auto w-full object-contain object-center",
-            imgBlend
-          )}
-          priority
-        />
-      </div>
+      <Image
+        src={LOGO_SRC_PORTAL}
+        alt={ALT}
+        width={1920}
+        height={440}
+        quality={100}
+        sizes="(max-width: 639px) 100vw, (max-width: 1024px) 52rem, 56rem"
+        className={cn(
+          "portal-logo-img mx-auto block h-auto w-full max-w-[min(100%,56rem)] object-contain object-center",
+          className,
+          imgBlend
+        )}
+        priority
+      />
     );
   }
 
@@ -91,21 +90,20 @@ export function BrandLogo({
 
   if (variant === "sidebar") {
     return (
-      <div className={cn("sidebar-logo-wrap w-full", className)}>
-        <Image
-          src={LOGO_SRC_PORTAL}
-          alt={ALT}
-          width={1920}
-          height={440}
-          quality={100}
-          sizes="(max-width: 1023px) 240px, 260px"
-          className={cn(
-            "sidebar-logo-img mx-auto block h-auto w-full object-contain object-center",
-            imgBlend
-          )}
-          priority
-        />
-      </div>
+      <Image
+        src={LOGO_SRC_PORTAL}
+        alt={ALT}
+        width={1920}
+        height={440}
+        quality={100}
+        sizes="(max-width: 1023px) 240px, 260px"
+        className={cn(
+          "sidebar-logo-img mx-auto block h-auto w-full object-contain object-center",
+          className,
+          imgBlend
+        )}
+        priority
+      />
     );
   }
 

@@ -9,7 +9,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "logo:transparent": "node scripts/remove-logo-background.mjs"
+    "logo:transparent": "node scripts/remove-logo-background.mjs",
+    "logo:portal-transparent": "node scripts/process-portal-logo.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.5.0",
