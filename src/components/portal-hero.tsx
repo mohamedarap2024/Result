@@ -4,7 +4,7 @@ import { BrandLogo } from "@/components/brand-logo";
 /** Home / search portal — official logo + search CTA */
 export function PortalHero() {
   return (
-    <div className="portal-hero mx-auto mb-6 w-full max-w-4xl text-center sm:mb-8">
+    <div className="portal-hero mx-auto mb-6 w-full max-w-5xl text-center sm:mb-8">
       <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-4 py-1.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-primary sm:mb-5 sm:text-xs">
         <Sparkles className="h-3.5 w-3.5 shrink-0" />
         Official Results Portal

@@ -105,69 +105,69 @@
   filter: drop-shadow(0 10px 28px rgba(0, 0, 0, 0.55));
 }
 
-/* Search portal — black banner plate */
-.portal-logo-frame {
-  position: relative;
+/* Search portal — large logo, no box/border */
+.portal-logo-wrap {
   margin-inline: auto;
   width: 100%;
-  max-width: min(100%, 40rem);
-  padding: 0.45rem 0.6rem;
-  border-radius: 0.625rem;
-  border: 1px solid rgba(16, 185, 129, 0.28);
-  background: #000000;
-  box-shadow: 0 12px 32px -14px rgba(0, 0, 0, 0.75);
+  max-width: min(100%, 56rem);
+  padding: 0;
+  border: none;
+  background: transparent;
 }
 
 .portal-logo-img {
-  max-height: 3.75rem;
   width: 100%;
+  height: auto;
+  max-height: 5.5rem;
+  filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.45));
 }
 
 @media (min-width: 640px) {
-  .portal-logo-frame {
-    padding: 0.55rem 0.75rem;
-    max-width: min(100%, 42rem);
-  }
-
   .portal-logo-img {
-    max-height: 4.75rem;
+    max-height: 7rem;
   }
 }
 
 @media (min-width: 768px) {
   .portal-logo-img {
-    max-height: 5.5rem;
+    max-height: 8.25rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .portal-logo-img {
+    max-height: 9rem;
   }
 }
 
 @media (max-width: 639px) {
-  .portal-logo-frame {
-    padding: 0.35rem 0.45rem;
+  .portal-logo-wrap {
     max-width: 100%;
   }
 
   .portal-logo-img {
-    max-height: 3.1rem !important;
+    max-height: 4.75rem !important;
   }
 }
 
-/* Admin sidebar — same banner, compact */
-.sidebar-logo-frame {
-  overflow: hidden;
-  border-radius: 0.5rem;
-  border: 1px solid rgba(16, 185, 129, 0.22);
-  background: #000000;
-  padding: 0.35rem 0.45rem;
+/* Admin sidebar — large readable logo, no box */
+.sidebar-logo-wrap {
+  width: 100%;
+  padding: 0;
+  border: none;
+  background: transparent;
 }
 
 .sidebar-logo-img {
-  max-height: 3.25rem;
   width: 100%;
+  height: auto;
+  max-height: 4.5rem;
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.4));
 }
 
 @media (min-width: 1024px) {
   .sidebar-logo-img {
-    max-height: 3.75rem;
+    max-height: 5.25rem;
   }
 }
 
