@@ -18,11 +18,13 @@ export default function Home() {
   const [result, setResult] = useState<Student | null>(null);
   const [loading, setLoading] = useState(false);
   const [pdfLoading, setPdfLoading] = useState(false);
+  const [searchError, setSearchError] = useState<string | null>(null);
 
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!query.trim()) return;
     setLoading(true);
+    setSearchError(null);
     try {
       const res = await api.get(
         `/students/search/${encodeURIComponent(query.trim())}`
@@ -31,7 +33,7 @@ export default function Home() {
       notify(res.data.message || MSG.search.found);
     } catch (err: unknown) {
       setResult(null);
-      notify(getApiMessage(err, MSG.search.notFound));
+      setSearchError(getApiMessage(err, MSG.search.notFound));
     } finally {
       setLoading(false);
     }
@@ -87,7 +89,10 @@ export default function Home() {
                     <Search className="pointer-events-none absolute left-4 top-1/2 z-10 h-5 w-5 -translate-y-1/2 text-primary" />
                     <Input
                       value={query}
-                      onChange={(e) => setQuery(e.target.value)}
+                      onChange={(e) => {
+                        setQuery(e.target.value);
+                        if (searchError) setSearchError(null);
+                      }}
                       placeholder="Enter your Student ID"
                       inputMode="numeric"
                       autoComplete="off"
@@ -104,6 +109,14 @@ export default function Home() {
                     {loading ? "Searching…" : "Search"}
                   </Button>
                 </form>
+                {searchError && (
+                  <p
+                    className="mt-3 text-center text-sm font-medium text-rose-300"
+                    aria-live="polite"
+                  >
+                    {searchError}
+                  </p>
+                )}
               </div>
             </motion.div>
           </motion.div>

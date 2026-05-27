@@ -177,7 +177,13 @@ export async function exportStudentResultPdf(
   doc.text("SUBJECT MARKS", MARGIN, y);
   y += 8;
 
-  const rowH = 10;
+  const tableBottom = 279; // keep space above footer text
+  const subjectCount = Math.max(subjects.length, 1);
+  const slot = (tableBottom - y) / subjectCount;
+  const rowH = Math.max(7.2, Math.min(10, slot - 1.2));
+  const rowGap = Math.max(0.8, slot - rowH);
+  const rowFontSize = rowH < 8.5 ? 9 : 10;
+  let rowTextY = y + rowH * 0.62;
   doc.setFont("helvetica", "normal");
 
   if (subjects.length === 0) {
@@ -186,29 +192,25 @@ export async function exportStudentResultPdf(
     doc.text("No subject data", MARGIN, y + 4);
   } else {
     for (const [subject, score] of subjects) {
-      if (y + rowH > 275) {
-        doc.addPage();
-        y = MARGIN;
-      }
-
       doc.setDrawColor(226, 232, 240);
       doc.setFillColor(248, 250, 252);
       doc.roundedRect(MARGIN, y, CONTENT_W, rowH, 1.5, 1.5, "FD");
 
-      doc.setFontSize(10);
+      doc.setFontSize(rowFontSize);
       doc.setTextColor(30, 41, 59);
       const label =
         subject.charAt(0).toUpperCase() + subject.slice(1).replace(/_/g, " ");
       const labelLines = doc.splitTextToSize(label, CONTENT_W - 40);
-      doc.text(labelLines, MARGIN + 4, y + 6.5);
+      doc.text(labelLines, MARGIN + 4, rowTextY);
 
       doc.setFont("helvetica", "bold");
-      doc.text(String(score), PAGE_W - MARGIN - 4, y + 6.5, {
+      doc.text(String(score), PAGE_W - MARGIN - 4, rowTextY, {
         align: "right",
       });
       doc.setFont("helvetica", "normal");
 
-      y += rowH + 2.5;
+      y += rowH + rowGap;
+      rowTextY = y + rowH * 0.62;
     }
   }
 
