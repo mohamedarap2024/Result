@@ -3,6 +3,7 @@
 import { forwardRef } from "react";
 import { BrandLogo } from "@/components/brand-logo";
 import type { Student } from "@/lib/api";
+import { GRADING_SCALE, getPassFailStatus } from "@/lib/grades";
 import { cn } from "@/lib/utils";
 
 type ResultSheetProps = {
@@ -16,6 +17,8 @@ export const ResultSheet = forwardRef<HTMLDivElement, ResultSheetProps>(
     const subjects = Object.entries(student.subjects || {}).filter(
       ([key]) => key.toLowerCase() !== "average"
     );
+    const passFail = getPassFailStatus(student.grade);
+    const passed = passFail.status === "PASS";
 
     return (
       <div
@@ -41,21 +44,41 @@ export const ResultSheet = forwardRef<HTMLDivElement, ResultSheetProps>(
           </p>
         </div>
 
-        <div className="grid grid-cols-2 gap-3 border-b border-slate-200 bg-slate-50 px-4 py-4 sm:px-8">
-          <div className="rounded-lg border border-slate-200 bg-white px-4 py-3 text-center">
-            <p className="text-xs font-medium uppercase tracking-wide text-slate-500">
+        <div className="grid grid-cols-3 gap-2 border-b border-slate-200 bg-slate-50 px-4 py-4 sm:gap-3 sm:px-8">
+          <div className="rounded-lg border border-slate-200 bg-white px-2 py-3 text-center sm:px-4">
+            <p className="text-[10px] font-medium uppercase tracking-wide text-slate-500 sm:text-xs">
               Total Score
             </p>
-            <p className="mt-1 text-3xl font-black tabular-nums text-slate-900 sm:text-4xl">
+            <p className="mt-1 text-2xl font-black tabular-nums text-slate-900 sm:text-3xl">
               {student.total}
             </p>
           </div>
-          <div className="rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-center">
-            <p className="text-xs font-medium uppercase tracking-wide text-slate-500">
+          <div className="rounded-lg border border-emerald-200 bg-emerald-50 px-2 py-3 text-center sm:px-4">
+            <p className="text-[10px] font-medium uppercase tracking-wide text-slate-500 sm:text-xs">
               Final Grade
             </p>
-            <p className="mt-1 text-3xl font-black text-emerald-700 sm:text-4xl">
+            <p className="mt-1 text-2xl font-black text-emerald-700 sm:text-3xl">
               {student.grade}
+            </p>
+          </div>
+          <div
+            className={cn(
+              "rounded-lg border px-2 py-3 text-center sm:px-4",
+              passed
+                ? "border-emerald-300 bg-emerald-50"
+                : "border-rose-300 bg-rose-50"
+            )}
+          >
+            <p className="text-[10px] font-medium uppercase tracking-wide text-slate-500 sm:text-xs">
+              Result Status
+            </p>
+            <p
+              className={cn(
+                "mt-1 text-xl font-black uppercase sm:text-2xl",
+                passed ? "text-emerald-700" : "text-rose-700"
+              )}
+            >
+              {passFail.label}
             </p>
           </div>
         </div>
@@ -83,6 +106,32 @@ export const ResultSheet = forwardRef<HTMLDivElement, ResultSheetProps>(
           ) : (
             <p className="text-sm text-slate-500">No subject data</p>
           )}
+        </div>
+
+        <div className="border-t border-slate-200 px-4 py-4 sm:px-8">
+          <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-500">
+            Grading System
+          </p>
+          <div className="overflow-hidden rounded-lg border border-slate-200 text-xs">
+            <div className="grid grid-cols-3 bg-slate-100 px-3 py-2 font-semibold text-slate-600">
+              <span>Grade</span>
+              <span>Marks range</span>
+              <span>Remark</span>
+            </div>
+            {GRADING_SCALE.map((row) => (
+              <div
+                key={row.grade}
+                className="grid grid-cols-3 border-t border-slate-200 px-3 py-1.5 text-slate-700"
+              >
+                <span className="font-bold">{row.grade}</span>
+                <span>{row.range}</span>
+                <span>{row.remark}</span>
+              </div>
+            ))}
+          </div>
+          <p className="mt-2 text-center text-[10px] text-slate-500">
+            Pass: Grade C or above · Failed: Grade D or F
+          </p>
         </div>
 
         <div className="border-t border-slate-200 px-4 py-3 text-center text-[10px] text-slate-400 sm:px-8">

@@ -1,5 +1,6 @@
 import { jsPDF } from "jspdf";
 import { LOGO_SRC_RESULT, LOGO_VERSION } from "@/components/brand-logo";
+import { GRADING_SCALE, getPassFailStatus } from "@/lib/grades";
 import type { Student } from "@/lib/api";
 
 const MARGIN = 14;
@@ -73,6 +74,8 @@ export async function exportStudentResultPdf(
   const subjects = Object.entries(student.subjects || {}).filter(
     ([key]) => key.toLowerCase() !== "average"
   );
+  const passFail = getPassFailStatus(student.grade);
+  const passed = passFail.status === "PASS";
 
   const doc = new jsPDF({ orientation: "p", unit: "mm", format: "a4" });
   let y = MARGIN;
@@ -140,36 +143,47 @@ export async function exportStudentResultPdf(
   doc.line(MARGIN, y, PAGE_W - MARGIN, y);
   y += 10;
 
-  const boxW = (CONTENT_W - 4) / 2;
-  const boxH = 24;
+  const boxGap = 3;
+  const boxW = (CONTENT_W - boxGap * 2) / 3;
+  const boxH = 22;
+  const boxXs = [
+    MARGIN,
+    MARGIN + boxW + boxGap,
+    MARGIN + (boxW + boxGap) * 2,
+  ];
 
   doc.setDrawColor(226, 232, 240);
   doc.setFillColor(255, 255, 255);
-  doc.roundedRect(MARGIN, y, boxW, boxH, 2, 2, "FD");
-  doc.roundedRect(MARGIN + boxW + 4, y, boxW, boxH, 2, 2, "FD");
-
+  for (const x of boxXs) {
+    doc.roundedRect(x, y, boxW, boxH, 2, 2, "FD");
+  }
   doc.setFillColor(236, 253, 245);
-  doc.roundedRect(MARGIN + boxW + 4, y, boxW, boxH, 2, 2, "F");
+  doc.roundedRect(boxXs[1], y, boxW, boxH, 2, 2, "F");
+  doc.setFillColor(passed ? 236 : 254, passed ? 253 : 242, passed ? 245 : 242);
+  doc.roundedRect(boxXs[2], y, boxW, boxH, 2, 2, "F");
 
-  doc.setFontSize(8);
+  doc.setFontSize(7);
   doc.setFont("helvetica", "bold");
   doc.setTextColor(100, 116, 139);
-  doc.text("TOTAL SCORE", MARGIN + boxW / 2, y + 7, { align: "center" });
-  doc.text("FINAL GRADE", MARGIN + boxW + 4 + boxW / 2, y + 7, {
-    align: "center",
-  });
+  doc.text("TOTAL SCORE", boxXs[0] + boxW / 2, y + 6, { align: "center" });
+  doc.text("FINAL GRADE", boxXs[1] + boxW / 2, y + 6, { align: "center" });
+  doc.text("RESULT STATUS", boxXs[2] + boxW / 2, y + 6, { align: "center" });
 
-  doc.setFontSize(20);
+  doc.setFontSize(16);
   doc.setTextColor(15, 23, 42);
-  doc.text(String(student.total), MARGIN + boxW / 2, y + 18, {
+  doc.text(String(student.total), boxXs[0] + boxW / 2, y + 16, {
     align: "center",
   });
   doc.setTextColor(4, 120, 87);
-  doc.text(String(student.grade), MARGIN + boxW + 4 + boxW / 2, y + 18, {
+  doc.text(String(student.grade), boxXs[1] + boxW / 2, y + 16, {
+    align: "center",
+  });
+  doc.setTextColor(passed ? 4 : 190, passed ? 120 : 18, passed ? 87 : 60);
+  doc.text(passFail.label.toUpperCase(), boxXs[2] + boxW / 2, y + 16, {
     align: "center",
   });
 
-  y += boxH + 12;
+  y += boxH + 10;
 
   doc.setFontSize(9);
   doc.setFont("helvetica", "bold");
@@ -177,7 +191,7 @@ export async function exportStudentResultPdf(
   doc.text("SUBJECT MARKS", MARGIN, y);
   y += 8;
 
-  const tableBottom = 279; // keep space above footer text
+  const tableBottom = 246; // room for grading table + footer on one page
   const subjectCount = Math.max(subjects.length, 1);
   const slot = (tableBottom - y) / subjectCount;
   const rowH = Math.max(7.2, Math.min(10, slot - 1.2));
@@ -213,6 +227,42 @@ export async function exportStudentResultPdf(
       rowTextY = y + rowH * 0.62;
     }
   }
+
+  y += 4;
+  doc.setFontSize(8);
+  doc.setFont("helvetica", "bold");
+  doc.setTextColor(100, 116, 139);
+  doc.text("GRADING SYSTEM", MARGIN, y);
+  y += 5;
+
+  const scaleRowH = 4.8;
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(7);
+  doc.setFillColor(241, 245, 249);
+  doc.rect(MARGIN, y, CONTENT_W, scaleRowH, "F");
+  doc.setTextColor(71, 85, 105);
+  doc.text("Grade", MARGIN + 2, y + 3.4);
+  doc.text("Marks range", MARGIN + 22, y + 3.4);
+  doc.text("Remark", MARGIN + 52, y + 3.4);
+  y += scaleRowH;
+
+  doc.setFont("helvetica", "normal");
+  for (const row of GRADING_SCALE) {
+    doc.setDrawColor(226, 232, 240);
+    doc.line(MARGIN, y, PAGE_W - MARGIN, y);
+    doc.setTextColor(51, 65, 85);
+    doc.text(row.grade, MARGIN + 2, y + 3.4);
+    doc.text(row.range, MARGIN + 22, y + 3.4);
+    doc.text(row.remark, MARGIN + 52, y + 3.4);
+    y += scaleRowH;
+  }
+
+  y += 3;
+  doc.setFontSize(7);
+  doc.setTextColor(100, 116, 139);
+  doc.text("Pass: Grade C or above · Failed: Grade D or F", PAGE_W / 2, y, {
+    align: "center",
+  });
 
   doc.setFontSize(8);
   doc.setFont("helvetica", "normal");
