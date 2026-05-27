@@ -1,6 +1,6 @@
 import { jsPDF } from "jspdf";
 import { LOGO_SRC_RESULT, LOGO_VERSION } from "@/components/brand-logo";
-import { GRADING_SCALE, getPassFailStatus } from "@/lib/grades";
+import { getPassFailStatus } from "@/lib/grades";
 import type { Student } from "@/lib/api";
 
 const MARGIN = 14;
@@ -191,7 +191,7 @@ export async function exportStudentResultPdf(
   doc.text("SUBJECT MARKS", MARGIN, y);
   y += 8;
 
-  const tableBottom = 246; // room for grading table + footer on one page
+  const tableBottom = 279; // footer on one page
   const subjectCount = Math.max(subjects.length, 1);
   const slot = (tableBottom - y) / subjectCount;
   const rowH = Math.max(7.2, Math.min(10, slot - 1.2));
@@ -227,42 +227,6 @@ export async function exportStudentResultPdf(
       rowTextY = y + rowH * 0.62;
     }
   }
-
-  y += 4;
-  doc.setFontSize(8);
-  doc.setFont("helvetica", "bold");
-  doc.setTextColor(100, 116, 139);
-  doc.text("GRADING SYSTEM", MARGIN, y);
-  y += 5;
-
-  const scaleRowH = 4.8;
-  doc.setFont("helvetica", "bold");
-  doc.setFontSize(7);
-  doc.setFillColor(241, 245, 249);
-  doc.rect(MARGIN, y, CONTENT_W, scaleRowH, "F");
-  doc.setTextColor(71, 85, 105);
-  doc.text("Grade", MARGIN + 2, y + 3.4);
-  doc.text("Marks range", MARGIN + 22, y + 3.4);
-  doc.text("Remark", MARGIN + 52, y + 3.4);
-  y += scaleRowH;
-
-  doc.setFont("helvetica", "normal");
-  for (const row of GRADING_SCALE) {
-    doc.setDrawColor(226, 232, 240);
-    doc.line(MARGIN, y, PAGE_W - MARGIN, y);
-    doc.setTextColor(51, 65, 85);
-    doc.text(row.grade, MARGIN + 2, y + 3.4);
-    doc.text(row.range, MARGIN + 22, y + 3.4);
-    doc.text(row.remark, MARGIN + 52, y + 3.4);
-    y += scaleRowH;
-  }
-
-  y += 3;
-  doc.setFontSize(7);
-  doc.setTextColor(100, 116, 139);
-  doc.text("Pass: Grade C or above · Failed: Grade D or F", PAGE_W / 2, y, {
-    align: "center",
-  });
 
   doc.setFontSize(8);
   doc.setFont("helvetica", "normal");

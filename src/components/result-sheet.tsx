@@ -3,7 +3,7 @@
 import { forwardRef } from "react";
 import { BrandLogo } from "@/components/brand-logo";
 import type { Student } from "@/lib/api";
-import { GRADING_SCALE, getPassFailStatus } from "@/lib/grades";
+import { getPassFailStatus } from "@/lib/grades";
 import { cn } from "@/lib/utils";
 
 type ResultSheetProps = {
@@ -106,32 +106,6 @@ export const ResultSheet = forwardRef<HTMLDivElement, ResultSheetProps>(
           ) : (
             <p className="text-sm text-slate-500">No subject data</p>
           )}
-        </div>
-
-        <div className="border-t border-slate-200 px-4 py-4 sm:px-8">
-          <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-500">
-            Grading System
-          </p>
-          <div className="overflow-hidden rounded-lg border border-slate-200 text-xs">
-            <div className="grid grid-cols-3 bg-slate-100 px-3 py-2 font-semibold text-slate-600">
-              <span>Grade</span>
-              <span>Marks range</span>
-              <span>Remark</span>
-            </div>
-            {GRADING_SCALE.map((row) => (
-              <div
-                key={row.grade}
-                className="grid grid-cols-3 border-t border-slate-200 px-3 py-1.5 text-slate-700"
-              >
-                <span className="font-bold">{row.grade}</span>
-                <span>{row.range}</span>
-                <span>{row.remark}</span>
-              </div>
-            ))}
-          </div>
-          <p className="mt-2 text-center text-[10px] text-slate-500">
-            Pass: Grade C or above · Failed: Grade D or F
-          </p>
         </div>
 
         <div className="border-t border-slate-200 px-4 py-3 text-center text-[10px] text-slate-400 sm:px-8">
